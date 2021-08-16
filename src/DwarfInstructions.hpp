@@ -12,9 +12,13 @@
 #ifndef __DWARF_INSTRUCTIONS_HPP__
 #define __DWARF_INSTRUCTIONS_HPP__
 
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdint>
+#ifndef _LIBUNWIND_IS_BAREMETAL
+#include <cstdio>
+#else
+#define fprintf(fmt, ...)
+#endif
+#include <cstdlib>
 
 #include "dwarf2.h"
 #include "Registers.hpp"
@@ -56,8 +60,10 @@ private:
                                    pint_t initialStackValue);
   static pint_t getSavedRegister(A &addressSpace, const R &registers,
                                  pint_t cfa, const RegisterLocation &savedReg);
+#if ! _LIBUNWIND_NO_FLOAT
   static double getSavedFloatRegister(A &addressSpace, const R &registers,
                                   pint_t cfa, const RegisterLocation &savedReg);
+#endif
   static v128 getSavedVectorRegister(A &addressSpace, const R &registers,
                                   pint_t cfa, const RegisterLocation &savedReg);
 
@@ -103,6 +109,7 @@ typename A::pint_t DwarfInstructions<A, R>::getSavedRegister(
   _LIBUNWIND_ABORT("unsupported restore location for register");
 }
 
+#if ! _LIBUNWIND_NO_FLOAT
 template <typename A, typename R>
 double DwarfInstructions<A, R>::getSavedFloatRegister(
     A &addressSpace, const R &registers, pint_t cfa,
@@ -126,6 +133,7 @@ double DwarfInstructions<A, R>::getSavedFloatRegister(
   }
   _LIBUNWIND_ABORT("unsupported restore location for float register");
 }
+#endif
 
 template <typename A, typename R>
 v128 DwarfInstructions<A, R>::getSavedVectorRegister(
@@ -176,11 +184,14 @@ int DwarfInstructions<A, R>::stepWithDwarf(A &addressSpace, pint_t pc,
       for (int i = 0; i <= lastReg; ++i) {
         if (prolog.savedRegisters[i].location !=
             CFI_Parser<A>::kRegisterUnused) {
+#if ! _LIBUNWIND_NO_FLOAT
           if (registers.validFloatRegister(i))
             newRegisters.setFloatRegister(
                 i, getSavedFloatRegister(addressSpace, registers, cfa,
                                          prolog.savedRegisters[i]));
-          else if (registers.validVectorRegister(i))
+          else
+#endif
+          if (registers.validVectorRegister(i))
             newRegisters.setVectorRegister(
                 i, getSavedVectorRegister(addressSpace, registers, cfa,
                                           prolog.savedRegisters[i]));

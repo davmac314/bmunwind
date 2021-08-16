@@ -12,9 +12,11 @@
 #ifndef __DWARF_PARSER_HPP__
 #define __DWARF_PARSER_HPP__
 
+#ifndef _LIBUNWIND_IS_BAREMETAL
 #include <inttypes.h>
-#include <stdint.h>
 #include <stdio.h>
+#endif
+#include <stdint.h>
 #include <stdlib.h>
 
 #include "libunwind.h"

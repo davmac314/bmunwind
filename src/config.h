@@ -13,12 +13,15 @@
 #ifndef LIBUNWIND_CONFIG_H
 #define LIBUNWIND_CONFIG_H
 
-#include <assert.h>
-#include <stdio.h>
-#include <stdint.h>
-#include <stdlib.h>
-
 #include <__libunwind_config.h>
+
+#include <assert.h>
+#ifndef _LIBUNWIND_IS_BAREMETAL
+#include <stdio.h>
+#endif
+#include <cstdlib>
+#include <cstdint>
+#include <alloca.h>
 
 // Platform specific configuration defines.
 #ifdef __APPLE__

@@ -12,8 +12,8 @@
 #ifndef __REGISTERS_HPP__
 #define __REGISTERS_HPP__
 
-#include <stdint.h>
-#include <string.h>
+#include <cstdint>
+#include <cstring>
 
 #include "libunwind.h"
 #include "config.h"
@@ -257,13 +257,15 @@ class _LIBUNWIND_HIDDEN Registers_x86_64 {
 public:
   Registers_x86_64();
   Registers_x86_64(const void *registers);
-
+  
+  using float_reg_t = _LIBUNWIND_DOUBLE;
+  
   bool        validRegister(int num) const;
   uint64_t    getRegister(int num) const;
   void        setRegister(int num, uint64_t value);
   bool        validFloatRegister(int) const { return false; }
-  double      getFloatRegister(int num) const;
-  void        setFloatRegister(int num, double value);
+  float_reg_t getFloatRegister(int num) const;
+  void        setFloatRegister(int num, float_reg_t value);
   bool        validVectorRegister(int) const;
   v128        getVectorRegister(int num) const;
   void        setVectorRegister(int num, v128 value);
@@ -521,11 +523,11 @@ inline const char *Registers_x86_64::getRegisterName(int regNum) {
   }
 }
 
-inline double Registers_x86_64::getFloatRegister(int) const {
+inline Registers_x86_64::float_reg_t Registers_x86_64::getFloatRegister(int) const {
   _LIBUNWIND_ABORT("no x86_64 float registers");
 }
 
-inline void Registers_x86_64::setFloatRegister(int, double) {
+inline void Registers_x86_64::setFloatRegister(int, Registers_x86_64::float_reg_t) {
   _LIBUNWIND_ABORT("no x86_64 float registers");
 }
 

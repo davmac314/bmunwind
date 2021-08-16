@@ -18,12 +18,13 @@
 // to export these functions from libunwind.so as well.
 #define _LIBUNWIND_UNWIND_LEVEL1_EXTERNAL_LINKAGE 1
 
+#ifndef _LIBUNWIND_IS_BAREMETAL
 #include <inttypes.h>
+#include <stdio.h>
+#endif
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 
 #include "config.h"
 #include "libunwind.h"

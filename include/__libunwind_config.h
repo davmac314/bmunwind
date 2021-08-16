@@ -166,4 +166,14 @@
 # define _LIBUNWIND_HIGHEST_DWARF_REGISTER 287
 #endif // _LIBUNWIND_IS_NATIVE_ONLY
 
+#if defined(_LIBUNWIND_IS_BAREMETAL) && _LIBUNWIND_TARGET_X86_64
+# define _LIBUNWIND_DOUBLE uint64_t
+#else
+# define _LIBUNWIND_DOUBLE double
+#endif
+
+#if defined(_LIBUNWIND_TARGET_X86_64) || defined(_LIBUNWIND_TARGET_I386)
+# define _LIBUNWIND_NO_FLOAT 1
+#endif
+
 #endif // ____LIBUNWIND_CONFIG_H__

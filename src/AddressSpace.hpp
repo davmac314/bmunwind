@@ -12,10 +12,12 @@
 #ifndef __ADDRESSSPACE_HPP__
 #define __ADDRESSSPACE_HPP__
 
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdint>
+#ifndef _LIBUNWIND_IS_BAREMETAL
+#include <cstdio>
+#endif
+#include <cstdlib>
+#include <cstring>
 
 #include "libunwind.h"
 #include "config.h"
@@ -169,11 +171,13 @@ public:
     memcpy(&val, (void *)addr, sizeof(val));
     return val;
   }
-  double           getDouble(pint_t addr) {
+#if ! _LIBUNWIND_NO_FLOAT
+  double getDouble(pint_t addr) {
     double val;
     memcpy(&val, (void *)addr, sizeof(val));
     return val;
   }
+#endif
   v128             getVector(pint_t addr) {
     v128 val;
     memcpy(&val, (void *)addr, sizeof(val));

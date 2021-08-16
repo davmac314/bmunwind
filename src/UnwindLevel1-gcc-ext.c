@@ -9,12 +9,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include <inttypes.h>
 #include <stdbool.h>
 #include <stdint.h>
+#ifndef _LIBUNWIND_IS_BAREMETAL
 #include <stdio.h>
+#include <inttypes.h>
+#endif
 #include <stdlib.h>
-#include <string.h>
 
 #include "config.h"
 #include "libunwind_ext.h"

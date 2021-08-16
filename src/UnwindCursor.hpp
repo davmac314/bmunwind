@@ -11,9 +11,11 @@
 #ifndef __UNWINDCURSOR_HPP__
 #define __UNWINDCURSOR_HPP__
 
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdint>
+#ifndef _LIBUNWIND_IS_BAREMETAL
+#include <ctdio>
+#endif
+#include <cstdlib>
 #include <unwind.h>
 
 #ifdef _WIN32
@@ -423,12 +425,14 @@ public:
   virtual bool validFloatReg(int) {
     _LIBUNWIND_ABORT("validFloatReg not implemented");
   }
+#if ! _LIBUNWIND_NO_FLOAT
   virtual unw_fpreg_t getFloatReg(int) {
     _LIBUNWIND_ABORT("getFloatReg not implemented");
   }
   virtual void setFloatReg(int, unw_fpreg_t) {
     _LIBUNWIND_ABORT("setFloatReg not implemented");
   }
+#endif
   virtual int step() { _LIBUNWIND_ABORT("step not implemented"); }
   virtual void getInfo(unw_proc_info_t *) {
     _LIBUNWIND_ABORT("getInfo not implemented");
@@ -888,8 +892,10 @@ public:
   virtual unw_word_t  getReg(int);
   virtual void        setReg(int, unw_word_t);
   virtual bool        validFloatReg(int);
+#if ! _LIBUNWIND_NO_FLOAT
   virtual unw_fpreg_t getFloatReg(int);
   virtual void        setFloatReg(int, unw_fpreg_t);
+#endif
   virtual int         step();
   virtual void        getInfo(unw_proc_info_t *);
   virtual void        jumpto();
@@ -1244,6 +1250,7 @@ bool UnwindCursor<A, R>::validFloatReg(int regNum) {
   return _registers.validFloatRegister(regNum);
 }
 
+#if ! _LIBUNWIND_NO_FLOAT
 template <typename A, typename R>
 unw_fpreg_t UnwindCursor<A, R>::getFloatReg(int regNum) {
   return _registers.getFloatRegister(regNum);
@@ -1253,6 +1260,7 @@ template <typename A, typename R>
 void UnwindCursor<A, R>::setFloatReg(int regNum, unw_fpreg_t value) {
   _registers.setFloatRegister(regNum, value);
 }
+#endif
 
 template <typename A, typename R> void UnwindCursor<A, R>::jumpto() {
   _registers.jumpto();

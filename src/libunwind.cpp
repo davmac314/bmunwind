@@ -16,7 +16,6 @@
 
 #include <stdlib.h>
 
-
 #if !defined(__USING_SJLJ_EXCEPTIONS__)
 #include "AddressSpace.hpp"
 #include "UnwindCursor.hpp"
@@ -133,10 +132,12 @@ _LIBUNWIND_HIDDEN int __unw_get_fpreg(unw_cursor_t *cursor, unw_regnum_t regNum,
                        static_cast<void *>(cursor), regNum,
                        static_cast<void *>(value));
   AbstractUnwindCursor *co = (AbstractUnwindCursor *)cursor;
+#if ! _LIBUNWIND_NO_FLOAT
   if (co->validFloatReg(regNum)) {
     *value = co->getFloatReg(regNum);
     return UNW_ESUCCESS;
   }
+#endif
   return UNW_EBADREG;
 }
 _LIBUNWIND_WEAK_ALIAS(__unw_get_fpreg, unw_get_fpreg)
@@ -152,10 +153,12 @@ _LIBUNWIND_HIDDEN int __unw_set_fpreg(unw_cursor_t *cursor, unw_regnum_t regNum,
                        static_cast<void *>(cursor), regNum, value);
 #endif
   AbstractUnwindCursor *co = (AbstractUnwindCursor *)cursor;
+#if ! _LIBUNWIND_NO_FLOAT
   if (co->validFloatReg(regNum)) {
     co->setFloatReg(regNum, value);
     return UNW_ESUCCESS;
   }
+#endif
   return UNW_EBADREG;
 }
 _LIBUNWIND_WEAK_ALIAS(__unw_set_fpreg, unw_set_fpreg)
