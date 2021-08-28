@@ -21,4 +21,4 @@ $(SOBJS): %.o: %.S
 	gcc $(CPPFLAGS) $(LIBUNWIND_CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(COBJS) $(CCOBJS) $(SOBJS)
+	rm -f $(COBJS) $(CXXOBJS) $(SOBJS)
