@@ -11,7 +11,7 @@ LIBUNWIND_CPPFLAGS ::= -I../include -D_LIBUNWIND_IS_BAREMETAL -D_LIBUNWIND_IS_NA
 all: $(CXXOBJS) $(COBJS) $(SOBJS)
 	ar r $(OUTDIR)/libunwind.a $(CXXOBJS) $(COBJS) $(SOBJS)
 
-$(CCOBJS): %.o: %.cpp
+$(CXXOBJS): %.o: %.cpp
 	g++ $(CXXPPFLAGS) $(LIBUNWIND_CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
 $(COBJS): %.o: %.c
