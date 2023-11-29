@@ -12,13 +12,14 @@ all: $(CXXOBJS) $(COBJS) $(SOBJS)
 	ar r $(OUTDIR)/libunwind.a $(CXXOBJS) $(COBJS) $(SOBJS)
 
 $(CXXOBJS): %.o: %.cpp
-	g++ $(CXXPPFLAGS) $(LIBUNWIND_CPPFLAGS) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXPPFLAGS) $(LIBUNWIND_CPPFLAGS) $(CXXFLAGS) -c $< -o $@
 
+# Note that _Unwind_RaiseException must be built with unwind tables (-funwind-tables)
 $(COBJS): %.o: %.c
-	gcc $(CPPFLAGS) $(LIBUNWIND_CPPFLAGS) $(CFLAGS) -c $< -o $@
+	$(CC) $(CPPFLAGS) $(LIBUNWIND_CPPFLAGS) $(CFLAGS) -funwind-tables -c $< -o $@
 	
 $(SOBJS): %.o: %.S
-	gcc $(CPPFLAGS) $(LIBUNWIND_CPPFLAGS) $(CFLAGS) -c $< -o $@
+	$(CC) $(CPPFLAGS) $(LIBUNWIND_CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 clean:
 	rm -f $(COBJS) $(CXXOBJS) $(SOBJS)
